@@ -15,6 +15,7 @@ public class ServerThread extends Thread{
     PrintWriter os=null;
     Socket s=null;
     int player_number;
+    int selected_card ; 
 
     public ServerThread(Socket s, int player_number){
         this.s=s;
@@ -32,11 +33,12 @@ public class ServerThread extends Thread{
 
     try {
         line=is.readLine();
+        selected_card = Integer.parseInt(line);
         while(line.compareTo("QUIT")!=0){
 
-            os.println(line);
+            os.println(selected_card);
             os.flush();
-            System.out.println("Response to Client  :  "+line);
+            System.out.println("Card Selected By Player "+ player_number + " is :" + selected_card);
             line=is.readLine();
         }   
     } catch (IOException e) {
