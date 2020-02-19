@@ -46,7 +46,7 @@ public class master_server
         while (true)
         {
             try {
-				s= serverSocket.accept();
+				s = serverSocket.accept();
 				ServerThread st = new ServerThread(s,player_number);
 				st.start();
 				players[player_number-1] = st;
