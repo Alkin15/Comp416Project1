@@ -18,7 +18,7 @@ public static void main(String args[]) throws IOException{
     BufferedReader br=null;
     BufferedReader is=null;
     PrintWriter os=null;
-
+    boolean game_init= false;
     try {
         s1=new Socket(address, 4445); // You can use static final constant PORT_NUM
         br= new BufferedReader(new InputStreamReader(System.in));
@@ -42,6 +42,8 @@ public static void main(String args[]) throws IOException{
                 response=is.readLine();
                 System.out.println("Server Response : "+response);
                 line=br.readLine();
+			
+
 
             }
 
