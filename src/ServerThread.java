@@ -18,6 +18,7 @@ public class ServerThread extends Thread{
     int player_number;
     int selected_card ; 
     int rounds_won=0;
+    String last_round;
     int rounds_played=0;
     int game_start=0;
     int[] deck = new int[26];
@@ -55,12 +56,52 @@ public class ServerThread extends Thread{
                     line=is.readLine();
                     selected_card = Integer.parseInt(line);
                     
-                    os.println(selected_card);
-                    os.flush();
-                    
-                    card_ready = true;
+                    if (selected_card==2) {
+                    	if (card_ready== true) {
+							os.println("You have already selected card!");
+							os.flush();
+							
+						}else{
+	                        os.println(deck[rounds_played]);
+	                        os.flush();
+	                        card_ready = true;
 
-                    System.out.println("Card Selected By Player "+ player_number + " is :" + getSelected_card());
+	                        System.out.println("Card Selected By Player "+ player_number + " is :" + getSelected_card());
+							
+						}
+
+					}
+                    else if (selected_card==3) {
+                    	if (last_round==null) {
+							os.println("No rounds have been played.");
+							os.flush();
+							
+							System.out.println("No rounds have been played by Player " + getPlayer_number());
+						}else {
+							os.println("Last round was " + rounds_played + "and result is " + last_round);
+							os.flush();
+							
+	                        System.out.println("Last round was " + rounds_played + " for player "+ player_number + " was :" + last_round);
+						}
+
+						
+					}
+                    else if (selected_card==4) {
+                    	os.println("Currently You have played " + rounds_played +" and won "+ rounds_won);
+                    	os.flush();
+                    	
+                    	System.out.println("Currently player " +player_number +" has played" + rounds_played +" and won "+ rounds_won);
+						
+					}else {
+						os.println("Invalid Input, Try 2 3 or 4");
+						os.flush();
+						
+						System.out.println("Invalid Input from" + player_number);
+					}
+                    
+
+                    
+
 					
 				} catch (Exception e) {
 
@@ -131,9 +172,11 @@ public class ServerThread extends Thread{
     public void round_won(){
     	rounds_won++;
     	rounds_played++;
+    	last_round = "You have won the last round!";
     }
     public void round_lost(){
     	rounds_played++;
+    	last_round= "You have lost the last round";
     }
 
 	public int getPlayer_number() {
@@ -145,7 +188,7 @@ public class ServerThread extends Thread{
 	}
 
 	public int getSelected_card() {
-		return selected_card;
+		return deck[rounds_played];
 	}
 
 	public void setSelected_card(int selected_card) {

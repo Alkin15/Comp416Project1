@@ -35,7 +35,8 @@ public static void main(String args[]) throws IOException{
 
     String response=null;
     try{
-        line=br.readLine(); 
+        line=br.readLine();
+        Integer.parseInt(line);
         while(line.compareTo("QUIT")!=0){
                 os.println(line);
                 os.flush();
@@ -51,8 +52,7 @@ public static void main(String args[]) throws IOException{
 
     }
     catch(IOException e){
-        e.printStackTrace();
-    System.out.println("Socket read Error");
+        System.out.println("Invalid Input!");
     }
     finally{
 
