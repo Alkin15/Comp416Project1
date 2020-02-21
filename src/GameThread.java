@@ -13,19 +13,19 @@ import java.util.stream.IntStream;
 
 public class GameThread extends Thread{
 
-	/*collection name, a.k.a the game's name. */
 	String collectionName;
+	MongoConnection connection;
 	
-	MongoConnection connection = new MongoConnection(collectionName);
 	int game_number;
 	ServerThread player1;
 	ServerThread player2;
 	int[] deck = IntStream.range(0, 52).toArray();
-	public GameThread(int game_number, ServerThread player1, ServerThread player2){
+	public GameThread(int game_number, ServerThread player1, ServerThread player2, MongoConnection connection){
 		this.game_number=game_number;
 		this.player1 = player1;
 		this.player2 = player2;
-		this.collectionName = player1.getName() + "-" + player2.getName();
+		this.collectionName = player1.getPlayerName() + "-" + player2.getPlayerName();
+		this.connection = connection;
 	}
 
 	public void run() {
@@ -34,7 +34,7 @@ public class GameThread extends Thread{
 		deal_deck();
 
 		if (!connection.hasCollection(collectionName)) {
-			connection.openCollection(player1.getName(), player2.getName());
+			connection.openCollection(player1.getPlayerName(), player2.getPlayerName());
 		} else {
 			System.out.println("Collection exists");
 		}
@@ -79,14 +79,14 @@ public class GameThread extends Thread{
 	}
 	public void compare__cards(int game_number){
 		if (get_card_value(player1.getSelected_card())>get_card_value(player2.getSelected_card())) {
-			connection.addPointToPlayer(player1.getName());
+			connection.addPointToPlayer(player1.getPlayerName());
 			player1.round_won();
 			player2.round_lost();
 			System.out.println("Round won by Player " + player1.getPlayer_number() + " .");
 			player1.card_ready=false;
 			player2.card_ready=false;
 		}else if (get_card_value(player1.getSelected_card())<get_card_value(player2.getSelected_card())) {
-			connection.addPointToPlayer(player2.getName());
+			connection.addPointToPlayer(player2.getPlayerName());
 			player2.round_won();
 			player1.round_lost();
 			System.out.println("Round won by Player " + player2.getPlayer_number() + " .");
@@ -100,7 +100,10 @@ public class GameThread extends Thread{
 			player1.card_ready=false;
 		}
 
-		connection.incrementRound(player1.getName(), player2.getName());
+		connection.incrementRound(player1.getPlayerName(), player2.getPlayerName());
 	}
+	
+
+	
 
 }

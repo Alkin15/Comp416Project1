@@ -11,6 +11,8 @@ import java.util.Enumeration;
 
 public class ServerThread extends Thread{
 
+	MongoConnection connection;
+
 	String line=null;
 	BufferedReader  is = null;
 	PrintWriter os=null;
@@ -26,9 +28,10 @@ public class ServerThread extends Thread{
 	int[] deck = new int[26];
 	public volatile boolean  card_ready;
 
-	public ServerThread(Socket s, int player_number){
+	public ServerThread(Socket s, int player_number, MongoConnection connection){
 		this.s=s;
 		this.player_number = player_number;
+		this.connection = connection;
 	}
 
 	public void run() {
@@ -47,7 +50,6 @@ public class ServerThread extends Thread{
 				line=is.readLine();
 				selected_card = Integer.parseInt(line);
 			} catch (Exception e) {
-				// TODO: handle exception
 				selected_card = 1;
 
 
@@ -127,12 +129,12 @@ public class ServerThread extends Thread{
 								s.close();
 								System.out.println("Socket Closed");
 							}
+							connection.dropCollection();
 
 						}
 						catch(IOException ie){
 							System.out.println("Socket Close Error");
 						}
-
 					}
 
 
@@ -164,15 +166,18 @@ public class ServerThread extends Thread{
 
 
 				}
-
-
+				if (line.compareTo("QUIT")==0) {
+					connection.dropCollection();
+					break;
+				}
+				
 			}
+			connection.dropCollection();
 		}
 		catch(NullPointerException e){
 			line=this.getName(); //reused String line for getting thread name
 			System.out.println("Client "+line+" Closed");
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -192,6 +197,7 @@ public class ServerThread extends Thread{
 					s.close();
 					System.out.println("Socket Closed");
 				}
+				connection.dropCollection();
 
 			}
 			catch(IOException ie){
@@ -257,5 +263,15 @@ public class ServerThread extends Thread{
 
 		return line;
 	}
+
+	public String getPlayerName() {
+		return name;
+	}
+
+	public void setPlayerName(String name) {
+		this.name = name;
+	}
+
+
 
 }
