@@ -32,7 +32,9 @@ public class GameThread extends Thread{
 		System.out.println(Arrays.toString(deck));
 		shuffleDeck();
 		deal_deck();
-
+		
+		System.out.println(player1.getPlayerName() + player2.getPlayerName());
+		
 		if (!connection.hasCollection(collectionName)) {
 			connection.openCollection(player1.getPlayerName(), player2.getPlayerName());
 		} else {

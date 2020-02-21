@@ -78,22 +78,6 @@ public class master_server
 		}
 	}
 
-	public String getCollectionName() {
-		return collectionName;
-	}
-
-	public void setCollectionName(String collectionName) {
-		this.collectionName = collectionName;
-	}
-
-	public MongoConnection getConnection() {
-		return connection;
-	}
-
-	public void setConnection(MongoConnection connection) {
-		this.connection = connection;
-	}
-
 
 
 }
