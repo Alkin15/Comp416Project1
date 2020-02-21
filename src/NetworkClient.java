@@ -12,7 +12,8 @@ public class NetworkClient {
 public static void main(String args[]) throws IOException{
 
 
-    InetAddress address=InetAddress.getLocalHost();
+    InetAddress address3=InetAddress.getByName("212.253.113.4"); 
+    String address = ("192.168.1.2");
     Socket s1=null;
     String line=null;
     BufferedReader br=null;
@@ -20,7 +21,7 @@ public static void main(String args[]) throws IOException{
     PrintWriter os=null;
     boolean game_init= false;
     try {
-        s1=new Socket(address, 4445); // You can use static final constant PORT_NUM
+        s1=new Socket(address, 4444); // You can use static final constant PORT_NUM
         br= new BufferedReader(new InputStreamReader(System.in));
         is=new BufferedReader(new InputStreamReader(s1.getInputStream()));
         os= new PrintWriter(s1.getOutputStream());

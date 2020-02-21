@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,8 +13,8 @@ import java.util.Enumeration;
 
 public class master_server
 {
-    public static final String DEFAULT_SERVER_ADDRESS = "localhost";
-    public static final int DEFAULT_SERVER_PORT = 4445;
+    public static final String DEFAULT_SERVER_ADDRESS = "127.0.0.1";
+    public static final int DEFAULT_SERVER_PORT = 4444;
     private ServerSocket serverSocket;
     private Socket s;
     public ServerThread[] players;
@@ -33,10 +34,11 @@ public class master_server
             /*
             Opens up a server socket on the specified port and listens
              */
+        	InetAddress addr = InetAddress.getByName("192.168.1.2");
         	players = new ServerThread[50];
         	gameThread = new GameThread[25];
-            serverSocket = new ServerSocket(port);
-            System.out.println("Opened up a server socket on " + port);
+            serverSocket = new ServerSocket(port,50,addr);
+            System.out.println("Opened up a server socket on " + port + addr);
         }
         catch (IOException e)
         {
