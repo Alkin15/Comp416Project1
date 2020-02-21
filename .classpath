@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/json-simple-3.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/mongodb-driver-3.9.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/mongodb-driver-3.9.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/mongo-java-driver-3.9.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/mongo-java-driver-3.9.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/mongo-java-driver-3.9.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 public class GameThread extends Thread{
 	
-	
+	MongoConnection connection = new MongoConnection();
 	int game_number;
 	ServerThread player1;
 	ServerThread player2;
@@ -29,6 +29,12 @@ public class GameThread extends Thread{
 		shuffleDeck();
 		deal_deck();
 
+		if (!connection.hasCollection("player1" + "-" + "player2")) {
+			connection.openCollection("player1", "player2");
+		} else {
+			System.out.println("Collection exists");
+		}
+		
 		while (true) {
 			try {
 				if (player1.card_ready==true && player2.card_ready==true) {
