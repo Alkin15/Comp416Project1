@@ -21,6 +21,8 @@ public class ServerThread extends Thread{
     String last_round;
     int rounds_played=0;
     int game_start=0;
+    String name;
+    boolean is_won ;
     int[] deck = new int[26];
     public volatile boolean  card_ready;
 
@@ -39,6 +41,8 @@ public class ServerThread extends Thread{
     }
 
     try {
+    	name = enter_name();
+        System.out.println(name);
     	try {
             line=is.readLine();
             selected_card = Integer.parseInt(line);
@@ -52,7 +56,7 @@ public class ServerThread extends Thread{
         while(line.compareTo("QUIT")!=0){
         	if (game_start==1) {
         		try {
-        			
+        	    	
                     line=is.readLine();
                     selected_card = Integer.parseInt(line);
                     
@@ -107,6 +111,29 @@ public class ServerThread extends Thread{
 
 					
 				}
+        		if(rounds_played==25){
+        			 try{
+        			        System.out.println("Connection Closing..");
+        			        if (is!=null){
+        			            is.close(); 
+        			            System.out.println(" Socket Input Stream Closed");
+        			        }
+
+        			        if(os!=null){
+        			            os.close();
+        			            System.out.println("Socket Out Closed");
+        			        }
+        			        if (s!=null){
+        			        s.close();
+        			        System.out.println("Socket Closed");
+        			        }
+
+        			        }
+        			    catch(IOException ie){
+        			        System.out.println("Socket Close Error");
+        			    }
+        			
+        		}
 
 
 			}
@@ -144,7 +171,10 @@ public class ServerThread extends Thread{
     catch(NullPointerException e){
         line=this.getName(); //reused String line for getting thread name
         System.out.println("Client "+line+" Closed");
-    }
+    } catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 
     finally{    
     try{
@@ -177,6 +207,7 @@ public class ServerThread extends Thread{
     public void round_lost(){
     	rounds_played++;
     	last_round= "You have lost the last round";
+
     }
 
 	public int getPlayer_number() {
@@ -217,6 +248,14 @@ public class ServerThread extends Thread{
 
 	public void setGame_start(int game_start) {
 		this.game_start = game_start;
+	}
+	
+	public String enter_name() throws IOException{
+        line=is.readLine();
+        os.println(line);
+        os.flush();
+
+		return line;
 	}
 
 }

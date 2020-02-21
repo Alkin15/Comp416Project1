@@ -76,6 +76,7 @@ public class GameThread extends Thread{
     	
 				if (get_card_value(player1.getSelected_card())>get_card_value(player2.getSelected_card())) {
 					
+					
 					player1.round_won();
 					player2.round_lost();
 					System.out.println("Round won by Player" + player1.getPlayer_number() + " .");
@@ -91,6 +92,7 @@ public class GameThread extends Thread{
 					player2.card_ready=false;
 
 				} else {
+					
 					player1.round_lost();
 					player2.round_lost();
 					System.out.println("Round Tied.");

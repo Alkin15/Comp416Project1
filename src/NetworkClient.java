@@ -13,7 +13,7 @@ public static void main(String args[]) throws IOException{
 
 
     InetAddress address3=InetAddress.getByName("212.253.113.4"); 
-    String address = ("192.168.1.2");
+    String address = ("172.20.132.209");
     Socket s1=null;
     String line=null;
     BufferedReader br=null;
@@ -37,7 +37,6 @@ public static void main(String args[]) throws IOException{
     String response=null;
     try{
         line=br.readLine();
-        Integer.parseInt(line);
         while(line.compareTo("QUIT")!=0){
                 os.println(line);
                 os.flush();
