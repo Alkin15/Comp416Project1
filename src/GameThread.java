@@ -13,7 +13,10 @@ import java.util.stream.IntStream;
 
 public class GameThread extends Thread{
 
-	MongoConnection connection = new MongoConnection();
+	/*collection name, a.k.a the game's name. */
+	String collectionName;
+	
+	MongoConnection connection = new MongoConnection(collectionName);
 	int game_number;
 	ServerThread player1;
 	ServerThread player2;
@@ -22,6 +25,7 @@ public class GameThread extends Thread{
 		this.game_number=game_number;
 		this.player1 = player1;
 		this.player2 = player2;
+		this.collectionName = player1.getName() + "-" + player2.getName();
 	}
 
 	public void run() {
@@ -29,7 +33,7 @@ public class GameThread extends Thread{
 		shuffleDeck();
 		deal_deck();
 
-		if (!connection.hasCollection(player1.getName() + "-" + player2.getName())) {
+		if (!connection.hasCollection(collectionName)) {
 			connection.openCollection(player1.getName(), player2.getName());
 		} else {
 			System.out.println("Collection exists");
@@ -39,6 +43,9 @@ public class GameThread extends Thread{
 			try {
 				if (player1.card_ready==true && player2.card_ready==true) {
 					compare__cards(game_number);
+				}
+				if (player1.getRounds_played() == 25 && player2.getRounds_played() == 25) {
+					connection.dropCollection();
 				}
 			} catch (Exception e) {
 

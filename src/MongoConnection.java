@@ -16,16 +16,15 @@ public class MongoConnection{
 	
 	
 	/*collection name, a.k.a the game's name. */
-	static String collectionName;
-	
+	private String collectionName;
 	
 	private static final String uri = "mongodb+srv://Admin:admin@cluster0-9d4rq.mongodb.net/test?retryWrites=true&w=majority";
 	private static final MongoClientURI clientURI = new MongoClientURI(uri);
 	private static final MongoClient mongoClient = new MongoClient(clientURI);
 	protected static final MongoDatabase mongoDatabase = mongoClient.getDatabase("WarGame");
 	
-	public MongoConnection() {
-		
+	public MongoConnection(String collectionName) {
+		this.collectionName = collectionName;
 	}
 
 	/** Check if our database has a collection with the same name. 
@@ -147,6 +146,7 @@ public class MongoConnection{
 	public void dropCollection() {
 		MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
 		collection.drop();
+		
 	}
 
 }
