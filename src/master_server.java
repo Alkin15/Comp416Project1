@@ -13,41 +13,41 @@ import java.util.Enumeration;
 
 public class master_server
 {
-    public static final String DEFAULT_SERVER_ADDRESS = "127.0.0.1";
-    public static final int DEFAULT_SERVER_PORT = 4444;
-    private ServerSocket serverSocket;
-    private Socket s;
-    public ServerThread[] players;
-    public GameThread[] gameThread;
-    int player_number = 1;
-    int game_number = 0 ;
-    int waiting_player_number = 0 ;
+	public static final String DEFAULT_SERVER_ADDRESS = "127.0.0.1";
+	public static final int DEFAULT_SERVER_PORT = 4444;
+	private ServerSocket serverSocket;
+	private Socket s;
+	public ServerThread[] players;
+	public GameThread[] gameThread;
+	int player_number = 1;
+	int game_number = 0 ;
+	int waiting_player_number = 0 ;
 
-    /**
-     * Initiates a server socket on the input port and keeps listening on the line
-     * @param port
-     */
-    public master_server(int port)
-    {
-        try
-        {
-            /*
+	/**
+	 * Initiates a server socket on the input port and keeps listening on the line
+	 * @param port
+	 */
+	public master_server(int port)
+	{
+		try
+		{
+			/*
             Opens up a server socket on the specified port and listens
-             */
-        	InetAddress addr = InetAddress.getByName("172.20.132.209");
-        	players = new ServerThread[50];
-        	gameThread = new GameThread[25];
-            serverSocket = new ServerSocket(port,50,addr);
-            System.out.println("Opened up a server socket on " + port + addr);
-        }
-        catch (IOException e)
-        {
-            //e.printStackTrace();
-            System.err.println("Cannot open a server socket on port " + port);
-        }
-        while (true)
-        {
-            try {
+			 */
+			InetAddress addr = InetAddress.getByName("172.20.132.209");
+			players = new ServerThread[50];
+			gameThread = new GameThread[25];
+			serverSocket = new ServerSocket(port,50,addr);
+			System.out.println("Opened up a server socket on " + port + addr);
+		}
+		catch (IOException e)
+		{
+			//e.printStackTrace();
+			System.err.println("Cannot open a server socket on port " + port);
+		}
+		while (true)
+		{
+			try {
 				s = serverSocket.accept();
 				ServerThread st = new ServerThread(s,player_number);
 				st.start();
@@ -63,25 +63,17 @@ public class master_server
 					waiting_player_number = 0 ;
 
 				}
-				
-			
-
-
-
-
-
-				
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 				System.out.println("Connection Error");
 			}
 
-            
-        }
-    }
 
-    
+		}
+	}
+
+
 
 
 

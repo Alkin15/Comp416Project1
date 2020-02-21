@@ -15,7 +15,6 @@ import com.mongodb.client.MongoDatabase;
 public class MongoConnection{
 	
 	
-	
 	/*collection name, a.k.a the game's name. */
 	static String collectionName;
 	
@@ -26,14 +25,8 @@ public class MongoConnection{
 	protected static final MongoDatabase mongoDatabase = mongoClient.getDatabase("WarGame");
 	
 	public MongoConnection() {
-		// TODO Auto-generated constructor stub
 		
 	}
-
-
-	
-
-	
 
 	/** Check if our database has a collection with the same name. 
 	 * If it does, it means we cannot create a game with the same name,
@@ -80,6 +73,31 @@ public class MongoConnection{
 			System.out.println("Error updating player info in " + collectionName + "/" + playerName);
 		}
 		
+	}
+	
+	public void incrementRound(String player1, String player2) {
+		try {
+			int oldscore;
+			Bson updatedvalue;
+			Bson updateoperation;
+			
+			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+			Document found1 = (Document) collection.find(new Document("Player", player1)).first();
+			Document found2 = (Document) collection.find(new Document("Player", player2)).first();
+			if(found1 != null && found2 != null){
+				oldscore = found1.getInteger("NumRounds");
+				updatedvalue = new Document("NumRounds", oldscore++);
+				updateoperation = new Document("$set", updatedvalue);
+				collection.updateOne(found1,updateoperation);
+				
+				oldscore = found2.getInteger("NumRounds");
+				updatedvalue = new Document("NumRounds", oldscore++);
+				updateoperation = new Document("$set", updatedvalue);
+				collection.updateOne(found2,updateoperation);
+			}
+		} catch (Exception e){
+			System.out.println("Error adding point to player in " + collectionName + "/" + player1);
+		}
 	}
 	
 	/** Increases a player's score by 1 */
