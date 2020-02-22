@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
@@ -66,7 +67,7 @@ public class MongoConnection{
 			if(found != null){
 				Bson updatedvalue = new Document(changedValue, newValue);
 				Bson updateoperation = new Document("$set", updatedvalue);
-				collection.updateOne(found,updateoperation);
+				collection.findOneAndUpdate(found,updateoperation);
 			}
 		} catch (Exception e){
 			System.out.println("Error updating player info in " + collectionName + "/" + playerName);
@@ -87,12 +88,12 @@ public class MongoConnection{
 				oldscore = found1.getInteger("NumRounds");
 				updatedvalue = new Document("NumRounds", oldscore++);
 				updateoperation = new Document("$set", updatedvalue);
-				collection.updateOne(found1,updateoperation);
+				collection.findOneAndUpdate(found1,updateoperation);
 				
 				oldscore = found2.getInteger("NumRounds");
 				updatedvalue = new Document("NumRounds", oldscore++);
 				updateoperation = new Document("$set", updatedvalue);
-				collection.updateOne(found2,updateoperation);
+				collection.findOneAndUpdate(found2,updateoperation);
 			}
 		} catch (Exception e){
 			System.out.println("Error adding point to player in " + collectionName + "/" + player1);
@@ -109,6 +110,9 @@ public class MongoConnection{
 				Bson updatedvalue = new Document("Score", oldscore++);
 				Bson updateoperation = new Document("$set", updatedvalue);
 				collection.updateOne(found,updateoperation);
+				
+//				BasicDBObject updatedDocument = new BasicDBObject();
+//				updatedDocument.append("$set", new BasicDBObject().append("longitude", longitude));
 			}
 		} catch (Exception e){
 			System.out.println("Error adding point to player in " + collectionName + "/" + playerName);
@@ -134,7 +138,7 @@ public class MongoConnection{
 				
 				Bson updatedvalue = new Document("Remaining cards", result);
 				Bson updateoperation = new Document("$set", updatedvalue);
-				collection.updateOne(found,updateoperation);
+				collection.findOneAndUpdate(found,updateoperation);
 			}
 		} catch (Exception e){
 			System.out.println("Error removing card in " + collectionName + "/" + playerName);

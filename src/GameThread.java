@@ -24,7 +24,7 @@ public class GameThread extends Thread{
 		this.game_number=game_number;
 		this.player1 = player1;
 		this.player2 = player2;
-		this.collectionName = player1.getPlayerName() + "-" + player2.getPlayerName();
+		this.collectionName = player1.getName() + "-" + player2.getName();
 		this.connection = connection;
 	}
 
@@ -33,10 +33,10 @@ public class GameThread extends Thread{
 		shuffleDeck();
 		deal_deck();
 		
-		System.out.println(player1.getPlayerName() + player2.getPlayerName());
+		
 		
 		if (!connection.hasCollection(collectionName)) {
-			connection.openCollection(player1.getPlayerName(), player2.getPlayerName());
+			connection.openCollection(player1.getName(), player2.getName());
 		} else {
 			System.out.println("Collection exists");
 		}
@@ -81,14 +81,14 @@ public class GameThread extends Thread{
 	}
 	public void compare__cards(int game_number){
 		if (get_card_value(player1.getSelected_card())>get_card_value(player2.getSelected_card())) {
-			connection.addPointToPlayer(player1.getPlayerName());
+			connection.addPointToPlayer(player1.getName());
 			player1.round_won();
 			player2.round_lost();
 			System.out.println("Round won by Player " + player1.getPlayer_number() + " .");
 			player1.card_ready=false;
 			player2.card_ready=false;
 		}else if (get_card_value(player1.getSelected_card())<get_card_value(player2.getSelected_card())) {
-			connection.addPointToPlayer(player2.getPlayerName());
+			connection.addPointToPlayer(player2.getName());
 			player2.round_won();
 			player1.round_lost();
 			System.out.println("Round won by Player " + player2.getPlayer_number() + " .");
@@ -102,7 +102,7 @@ public class GameThread extends Thread{
 			player1.card_ready=false;
 		}
 
-		connection.incrementRound(player1.getPlayerName(), player2.getPlayerName());
+		connection.incrementRound(player1.getName(), player2.getName());
 	}
 	
 
