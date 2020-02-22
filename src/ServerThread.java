@@ -272,6 +272,4 @@ public class ServerThread extends Thread{
 		this.name = name;
 	}
 
-
-
 }
