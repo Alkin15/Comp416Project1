@@ -11,6 +11,6 @@
 	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/mongo-java-driver-3.9.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/mongo-java-driver-3.9.1-javadoc.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/mongo-java-driver-3.9.1-sources.jar"/>
-	<classpathentry kind="lib" path="src/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Pelin/Documents/GitHub/Comp416Project1/drivers/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
