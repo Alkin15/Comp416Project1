@@ -53,7 +53,7 @@ public class master_server
                 /*
                 Opens up a server socket on the specified port and listens
                  */
-            	InetAddress addr = InetAddress.getByName("192.168.1.5");
+            	InetAddress addr = InetAddress.getByName("192.168.1.111");
             	players = new ServerThread[50];
             	gameThread = new GameThread[25];
                 serverSocket = new ServerSocket(port,50,addr);
@@ -101,7 +101,7 @@ public class master_server
 			
 		}else if (follower == true) {
 			try {
-				InetAddress addr = InetAddress.getByName("192.168.1.5");
+				InetAddress addr = InetAddress.getByName("192.168.1.111");
 				System.out.println("Follower init");
 				Sock = new ServerSocket(4445,50,addr);
 				follower_Thread[] follower_all = new follower_Thread[25];

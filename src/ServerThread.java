@@ -3,11 +3,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.NetworkInterface;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.Enumeration;
 
 public class ServerThread extends Thread{
 
@@ -21,12 +18,13 @@ public class ServerThread extends Thread{
 	int selected_card ; 
 	int rounds_won=0;
 	String last_round;
-	int rounds_played=0;
+	volatile int rounds_played=23;
 	int game_start=0;
 	String name;
 	boolean is_won ;
 	int[] deck = new int[26];
 	public volatile boolean  card_ready;
+	public boolean did_win;
 
 	public ServerThread(Socket s, int player_number, MongoConnection connection){
 		this.s=s;
@@ -116,8 +114,17 @@ public class ServerThread extends Thread{
 					if(rounds_played==25){
 						try{
 							System.out.println("Connection Closing..");
+							if (did_win) {
+								os.flush();
+								os.close();
+
+							}else{
+								os.flush();
+								os.close();
+							}
+
 							if (is!=null){
-								is.close(); 
+								is.close();
 								System.out.println(" Socket Input Stream Closed");
 							}
 
@@ -129,6 +136,7 @@ public class ServerThread extends Thread{
 								s.close();
 								System.out.println("Socket Closed");
 							}
+							Thread.currentThread().interrupt();
 							connection.dropCollection();
 
 						}
@@ -198,6 +206,7 @@ public class ServerThread extends Thread{
 					System.out.println("Socket Closed");
 				}
 				connection.dropCollection();
+				Thread.interrupted();
 
 			}
 			catch(IOException ie){
@@ -273,3 +282,4 @@ public class ServerThread extends Thread{
 	}
 
 }
+

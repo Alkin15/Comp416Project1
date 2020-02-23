@@ -1,28 +1,43 @@
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 
 class FTPClient {
 
 	public static void main(String[] args) throws Exception {
-		String option;
-		DataInputStream in = new DataInputStream(System.in);
-		Socket s = new Socket("192.168.1.5", 4444);
-		System.out.println("MENU");
-		System.out.println("1.SEND");
-		System.out.println("2.RECEIVE");
-		FTPClient ftp = new FTPClient();
-		while (true) {
-			option = in.readLine();
-			if (option.equals("1")) {
-				System.out.println("SEND Command Received..");
-				ftp.sendfile(s);
-			}
 
-			else if (option.equals("2")) {
+		int follower_number=1;
+		File theDir = new File("Follower" + Integer.toString(follower_number));
+		// if the directory does not exist, create it
+		while (theDir.exists()) {
+			follower_number++;
+			theDir = new File("Follower" + Integer.toString(follower_number));
+		}
+		System.out.println("creating directory: " + theDir.getName());
+		boolean result = false;
+
+		try{
+			theDir.mkdir();
+			result = true;
+		}
+		catch(SecurityException se){
+			//handle it
+		}
+		if(result) {
+			System.out.println("DIR created");
+			String option;
+			DataInputStream in = new DataInputStream(System.in);
+			Socket s = new Socket("192.168.1.111", 4445);
+			System.out.println("MENU");
+			System.out.println("1.SEND");
+			System.out.println("2.RECEIVE");
+			FTPClient ftp = new FTPClient();
+			while (true) {
+				option = in.readLine();
+
 				System.out.println("RECEIVE Command Received..");
-				ftp.receivefile(s);
-			}
+				ftp.receivefile(s, follower_number);
 
+			}
 		}
 	}
 
@@ -50,7 +65,7 @@ class FTPClient {
 		System.out.println("File Sent");
 	}
 
-	public void receivefile(Socket s) throws Exception {
+	public void receivefile(Socket s, int follower_number) throws Exception {
 		Socket ssock = s;
 		DataInputStream in = new DataInputStream(System.in);
 		DataInputStream cin = new DataInputStream(ssock.getInputStream());
@@ -58,11 +73,14 @@ class FTPClient {
 
 		cout.writeUTF("SEND");
 
-		String filename = in.readLine();
+		String filename = "GameStates";
 		cout.writeUTF(filename);
 		System.out.println("Receiving File " + filename);
-		File f = new File(filename);
-		FileOutputStream fout = new FileOutputStream(f);
+		File theDir = new File("Follower" + Integer.toString(follower_number));
+		// if the directory does not exist, create it
+		File f = new File("Follower"+Integer.toString(follower_number)+ "/" + filename);
+		String path = ("Follower"+Integer.toString(follower_number)+ "/" + filename);
+		FileOutputStream fout = new FileOutputStream(path);
 		int ch;
 		do {
 			ch = Integer.parseInt(cin.readUTF());

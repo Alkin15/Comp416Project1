@@ -1,5 +1,6 @@
 import org.json.simple.JSONObject;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
@@ -11,15 +12,16 @@ public class GameThread extends Thread{
 
 	String collectionName;
 	MongoConnection connection;
-	
+
 	int game_number;
 	ServerThread player1;
 	ServerThread player2;
 	int[] deck = IntStream.range(0, 52).toArray();
 	JSONObject states = new JSONObject();
+	JSONObject zero = new JSONObject();
 	JSONObject hash = new JSONObject();
 	static int counter = 0;
-	String filename;
+	String filename, hashname;
 
 	public GameThread(int game_number, ServerThread player1, ServerThread player2, MongoConnection connection){
 		this.game_number=game_number;
@@ -27,10 +29,14 @@ public class GameThread extends Thread{
 		this.player2 = player2;
 		this.collectionName = player1.getName() + "-" + player2.getName();
 		this.connection = connection;
-
+		File theDir = new File("GameStates");
+		if(!theDir.exists()){
+			theDir.mkdir();
+		}
 		//Create states json file
 		filename = collectionName + ".json";
-		try (FileWriter file = new FileWriter(filename)) {
+		hashname = collectionName + "-Hash.json";
+		try (FileWriter file = new FileWriter("GameStates/" + filename)) {
 
 			file.write(states.toJSONString());
 			file.flush();
@@ -41,7 +47,7 @@ public class GameThread extends Thread{
 
 
 		//Create hash json file
-		try (FileWriter file = new FileWriter("hash.json")) {
+		try (FileWriter file = new FileWriter("GameStates/" + hashname)) {
 			hash.put("HashCode", states.hashCode());
 			file.write(hash.toJSONString());
 			file.flush();
@@ -56,8 +62,29 @@ public class GameThread extends Thread{
 		shuffleDeck();
 		deal_deck();
 
+		states.put(player1.getName(), Arrays.toString(player1.deck));
+		states.put(player2.getName(), Arrays.toString(player2.deck));
+		//written to json
+		try (FileWriter file = new FileWriter("GameStates/" + filename)) {
 
-		
+			file.write(states.toJSONString());
+			file.flush();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		//Create hash json file
+		try (FileWriter file = new FileWriter(hashname)) {
+			hash.put("HashCode", states.hashCode());
+			file.write(hash.toJSONString());
+			file.flush();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
 		if (!connection.hasCollection(collectionName)) {
 			connection.openCollection(player1.getName(), player2.getName());
 		} else {
@@ -70,15 +97,55 @@ public class GameThread extends Thread{
 					compare__cards(game_number);
 				}
 				if (player1.getRounds_played() == 25 && player2.getRounds_played() == 25) {
+					if (player1.rounds_won > player2.rounds_won) {
+						player1.did_win = true;
+						player2.did_win = false;
+						player1.os.println("The game has finished You won opponent lost, You can QUIT the game!");
+						player2.os.println("The game has finished You lost opponent won, You can QUIT the game!");
+//						endgame();
+					} else if (player1.rounds_won < player2.rounds_won) {
+						player2.os.println("The game has finished You won opponent lost, You can QUIT the game!");
+						player1.os.println("The game has finished You lost opponent won, You can QUIT the game!");						player2.did_win = true;
+						player1.did_win = false;
+//						endgame();
+					} else {
+						player1.os.println("The game has finished and tied, You can QUIT the game!");
+						player2.os.println("The game has finished and tied, You can QUIT the game!");
+						player2.did_win = false;
+						player2.did_win = false;
+//						endgame();
+					}
 					connection.dropCollection();
+					endgame();
 				}
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
+
 		}
 
 
 	}
+
+	private void endgame() {
+		//zero json files
+		try (FileWriter file = new FileWriter("GameStates/" + filename)) {
+
+			file.write(zero.toJSONString());
+			file.flush();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try (FileWriter file = new FileWriter("GameStates" + hashname)) {
+			file.write(zero.toJSONString());
+			file.flush();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	void shuffleDeck() {
 		Random rand = new Random();
 
@@ -148,7 +215,7 @@ public class GameThread extends Thread{
 
 		//HashCode Updated
 		hash.put("HashCode", hash.hashCode());
-		try (FileWriter file = new FileWriter("hash.json")) {
+		try (FileWriter file = new FileWriter(hashname)) {
 			hash.put("HashCode", states.hashCode());
 			file.write(hash.toJSONString());
 			file.flush();
