@@ -103,18 +103,18 @@ public class GameThread extends Thread{
 						player2.did_win = false;
 						player1.os.println("The game has finished You won opponent lost, You can QUIT the game!");
 						player2.os.println("The game has finished You lost opponent won, You can QUIT the game!");
-//						endgame();
+						endgame();
 					} else if (player1.rounds_won < player2.rounds_won) {
 						player2.os.println("The game has finished You won opponent lost, You can QUIT the game!");
 						player1.os.println("The game has finished You lost opponent won, You can QUIT the game!");						player2.did_win = true;
 						player1.did_win = false;
-//						endgame();
+						endgame();
 					} else {
 						player1.os.println("The game has finished and tied, You can QUIT the game!");
 						player2.os.println("The game has finished and tied, You can QUIT the game!");
 						player2.did_win = false;
 						player2.did_win = false;
-//						endgame();
+						endgame();
 					}
 					connection.dropCollection();
 					endgame();
