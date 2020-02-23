@@ -21,10 +21,10 @@ public class ServerThread extends Thread{
 	volatile int rounds_played=23;
 	int game_start=0;
 	String name;
+	public boolean did_win;
 	boolean is_won ;
 	int[] deck = new int[26];
 	public volatile boolean  card_ready;
-	public boolean did_win;
 
 	public ServerThread(Socket s, int player_number, MongoConnection connection){
 		this.s=s;
@@ -115,11 +115,11 @@ public class ServerThread extends Thread{
 						try{
 							System.out.println("Connection Closing..");
 							if (did_win) {
-								os.flush();
+								os.println("The game has finished you won!");
 								os.close();
 
 							}else{
-								os.flush();
+								os.println("The game has finished you lost!");
 								os.close();
 							}
 
@@ -138,6 +138,7 @@ public class ServerThread extends Thread{
 							}
 							Thread.currentThread().interrupt();
 							connection.dropCollection();
+							
 
 						}
 						catch(IOException ie){

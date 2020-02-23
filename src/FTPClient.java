@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 
 class FTPClient {
@@ -25,17 +26,26 @@ class FTPClient {
 		if(result) {
 			System.out.println("DIR created");
 			String option;
+			Config cfg = new Config();
+			String address   = cfg.getProperty("address");
+			InetAddress addr = InetAddress.getByName(address);
 			DataInputStream in = new DataInputStream(System.in);
-			Socket s = new Socket("192.168.1.111", 4445);
+			Socket s = new Socket(addr, 4445);
 			System.out.println("MENU");
 			System.out.println("1.SEND");
 			System.out.println("2.RECEIVE");
 			FTPClient ftp = new FTPClient();
 			while (true) {
 				option = in.readLine();
+				if (option.equals("1")) {
+					System.out.println("SEND Command Received..");
+					ftp.sendfile(s);
+				}
 
-				System.out.println("RECEIVE Command Received..");
-				ftp.receivefile(s, follower_number);
+				else if (option.equals("2")) {
+					System.out.println("RECEIVE Command Received..");
+					ftp.receivefile(s, follower_number);
+				}
 
 			}
 		}
@@ -73,7 +83,7 @@ class FTPClient {
 
 		cout.writeUTF("SEND");
 
-		String filename = "GameStates";
+		String filename = in.readLine();
 		cout.writeUTF(filename);
 		System.out.println("Receiving File " + filename);
 		File theDir = new File("Follower" + Integer.toString(follower_number));

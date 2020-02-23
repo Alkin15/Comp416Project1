@@ -1,5 +1,3 @@
-// A simple Client Server Protocol .. Client for Echo Server
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +10,8 @@ public class NetworkClient {
 	public static void main(String args[]) throws IOException{
 
 		InetAddress address3=InetAddress.getByName("212.253.113.4"); 
-		String address = ("192.168.1.111");
+		Config cfg = new Config();
+		String address = (cfg.getProperty("address"));
 		Socket s1=null;
 		String line=null;
 		BufferedReader br=null;

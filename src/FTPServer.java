@@ -13,7 +13,6 @@ class FTPServer {
 
 			String option = cin.readUTF();
 			if (option.equals("SEND")) {
-				System.out.println("SEND Command Received..");
 				ftp.sendfile(s);
 			}
 

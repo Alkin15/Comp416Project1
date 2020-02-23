@@ -24,7 +24,7 @@ public class MongoConnection{
 	private static final MongoClient mongoClient = new MongoClient(clientURI);
 	protected static final MongoDatabase mongoDatabase = mongoClient.getDatabase("WarGame");
 	
-	public MongoConnection(String collectionName) {
+	public MongoConnection(String collectionN) {
 		this.collectionName = collectionName;
 	}
 
@@ -40,26 +40,56 @@ public class MongoConnection{
 		return false;
 	}
 
-	/** Opens a new collection for a new game */
+	/** Opens a new collection for a new game
+	 * @param player1 First player's name
+	 * @param player2 Second player's name
+	 *  
+	 */
+
 	public void openCollection (String player1, String player2) {
 		collectionName = player1 + "-" + player2;	
 		mongoDatabase.createCollection(collectionName);
 		MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
 
 		Document document1 = new Document("Player", player1);
-		document1.append("NumRounds", 0);
-		document1.append("Score", 0);
+		document1.append("NumRounds", "0");
+		document1.append("Score", "0");
 		//document1.append("RemainingCards", deck1);
 		collection.insertOne(document1);
 
 		Document document2 = new Document("Player", player2);
-		document2.append("NumRounds", 0);
-		document2.append("Score", 0);
+		document2.append("NumRounds", "0");
+		document2.append("Score", "0");
 		//document2.append("RemainingCards", deck2);
 		collection.insertOne(document2);
 	}
+	
+//	public void updateGameState (String player1, int num1, int score1, String player2, int num2, int score2) {
+//		try {
+//			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+//			
+//			Document document1 = new Document("Player", player1);
+//			document1.append("NumRounds", num1);
+//			document1.append("Score", score1);
+//			//document1.append("RemainingCards", deck1);
+//			collection.insertOne(document1);
+//
+//			Document document2 = new Document("Player", player2);
+//			document2.append("NumRounds", num2);
+//			document2.append("Score", score2);
+//			//document2.append("RemainingCards", deck2);
+//			collection.insertOne(document2);
+//		} catch (Exception e){
+//			System.out.println("Error updating player info in " + collectionName + "/" + playerName);
+//		}
+//		
+//	}
 
-	/** Updates game state on collection */
+	/** Updates game state on collection 
+	 * @param playerName Name of the player that will be updated
+	 * @param changedValue The data that will be updated
+	 * @param newValue The new value of the data
+	 * */
 	public void updatePlayerInfo (String playerName, String changedValue, String newValue) {
 		try {
 			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
@@ -70,11 +100,14 @@ public class MongoConnection{
 				collection.findOneAndUpdate(found,updateoperation);
 			}
 		} catch (Exception e){
-			System.out.println("Error updating player info in " + collectionName + "/" + playerName);
+			//System.out.println("Error updating player info in " + collectionName + "/" + playerName);
 		}
 		
 	}
 	
+	/**
+	 * @deprecated
+	 * */
 	public void incrementRound(String player1, String player2) {
 		try {
 			int oldscore;
@@ -96,11 +129,13 @@ public class MongoConnection{
 				collection.findOneAndUpdate(found2,updateoperation);
 			}
 		} catch (Exception e){
-			System.out.println("Error adding point to player in " + collectionName + "/" + player1);
+			//System.out.println("Error adding point to player in " + collectionName + "/" + player1);
 		}
 	}
 	
-	/** Increases a player's score by 1 */
+	/** Increases a player's score by 1 
+	 * @deprecated*/
+	
 	public void addPointToPlayer (String playerName) {
 		try {
 			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
@@ -120,7 +155,8 @@ public class MongoConnection{
 		
 	}
 	
-	/** Removes the selected card from a player's deck */
+	/** Removes the selected card from a player's deck 
+	 * @deprecated*/
 	public void removeCard (String playerName, int cardNum) {
 		try {
 			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
@@ -151,6 +187,14 @@ public class MongoConnection{
 		MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
 		collection.drop();
 		
+	}
+
+	/** Returns collection name
+	 * @return collectionName
+	 * */
+	public String getCollectionName() {
+		// TODO Auto-generated method stub
+		return collectionName;
 	}
 
 }

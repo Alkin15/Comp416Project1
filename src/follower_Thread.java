@@ -7,6 +7,7 @@ public class follower_Thread extends Thread{
 	DataInputStream cin ;
 	DataOutputStream cout ;
 	Socket s;
+	long createdMillis = System.currentTimeMillis();
 	public follower_Thread (Socket s,int follower_number) throws IOException{
 		this.follower_number = follower_number;
 		this.s = s;
@@ -16,24 +17,29 @@ public class follower_Thread extends Thread{
 	}
 	
 	public void run(){
-		try {
-			String option = cin.readUTF();
-			if (option.equals("SEND")) {
-				System.out.println("SEND Command Received..");
-				sendfile(s);
-			}
+		while (true) {
+			try {
+				String option = cin.readUTF();
+				if (option.equals("SEND")) {
+			        long nowMillis = System.currentTimeMillis();
+			        long time_passed = (nowMillis - createdMillis) / 1000;
+			        
+					System.out.println("SEND Command Received.." + time_passed);
+					sendfile(s);
+				}
 
-			else if (option.equals("RECEIVE")) {
-				System.out.println("RECEIVE Command Received..");
-				receivefile(s);
+				else if (option.equals("RECEIVE")) {
+					System.out.println("RECEIVE Command Received..");
+					receivefile(s);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		
 	}
 	 public void sendfile(Socket s) throws Exception {
-			Socket ssock = s;
+		 Socket ssock = s;
 
 			cin = new DataInputStream(ssock.getInputStream());
 			cout = new DataOutputStream(ssock.getOutputStream());

@@ -88,7 +88,7 @@ public class GameThread extends Thread{
 		if (!connection.hasCollection(collectionName)) {
 			connection.openCollection(player1.getName(), player2.getName());
 		} else {
-			System.out.println("Collection exists");
+			//System.out.println("Collection exists");
 		}
 
 		while (true) {
