@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) throws Exception{
+
         System.out.println("1 for master 0 for follower");
         boolean follower = false;
 		Scanner in = new Scanner(System.in); 

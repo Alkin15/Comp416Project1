@@ -1,17 +1,14 @@
 // echo server
 
-import java.io.BufferedReader;
+import org.json.simple.JSONObject;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Enumeration;
 
 
 public class master_server
@@ -35,6 +32,7 @@ public class master_server
 	ServerSocket Sock ;
 	DataInputStream cin;
 	DataOutputStream cout;
+	public static JSONObject obj;
 
 	/**
 	 * Initiates a server socket on the input port and keeps listening on the line
@@ -42,14 +40,20 @@ public class master_server
 	 */
 	public master_server(int port,boolean follower) throws Exception
 	{
-		
+//		try{
+//			Object object = new JSONParser().parse(new FileReader("code.json"));
+//			obj = (JSONObject) object;
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+
 		if (follower==false) {
     		try
             {
                 /*
                 Opens up a server socket on the specified port and listens
                  */
-            	InetAddress addr = InetAddress.getByName("192.168.1.2");
+            	InetAddress addr = InetAddress.getByName("192.168.1.5");
             	players = new ServerThread[50];
             	gameThread = new GameThread[25];
                 serverSocket = new ServerSocket(port,50,addr);
@@ -97,7 +101,7 @@ public class master_server
 			
 		}else if (follower == true) {
 			try {
-				InetAddress addr = InetAddress.getByName("192.168.1.2");
+				InetAddress addr = InetAddress.getByName("192.168.1.5");
 				System.out.println("Follower init");
 				Sock = new ServerSocket(4445,50,addr);
 				follower_Thread[] follower_all = new follower_Thread[25];
@@ -127,7 +131,7 @@ public class master_server
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 

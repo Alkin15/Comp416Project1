@@ -6,7 +6,7 @@ class FTPClient {
 	public static void main(String[] args) throws Exception {
 		String option;
 		DataInputStream in = new DataInputStream(System.in);
-		Socket s = new Socket("192.168.1.2", 4444);
+		Socket s = new Socket("192.168.1.5", 4444);
 		System.out.println("MENU");
 		System.out.println("1.SEND");
 		System.out.println("2.RECEIVE");
