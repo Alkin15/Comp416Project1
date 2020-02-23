@@ -73,6 +73,7 @@ public class master_server
     				waiting_player_number++;
     				System.out.println("A connection was established with a client on the address of " + s.getRemoteSocketAddress()+ "With Player Number:" + st.player_number);
     				if (waiting_player_number == 2) {
+    					collectionName = players[game_number*2].getPlayerName() + "-" + players[game_number*2+1].getPlayerName();
     					System.out.println("Game has started for " + (game_number+1) + " !");
     					GameThread gameThread = new GameThread(game_number,players[game_number*2],players[game_number*2+1], mongoupdate);
     					gameThread.start();
