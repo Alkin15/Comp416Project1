@@ -14,18 +14,45 @@ import java.util.stream.IntStream;
 public class GameThread extends Thread{
 
 	String collectionName;
-	MongoConnection connection;
+	MongoUpdate mongoupdate;
 	
 	int game_number;
 	ServerThread player1;
 	ServerThread player2;
 	int[] deck = IntStream.range(0, 52).toArray();
-	public GameThread(int game_number, ServerThread player1, ServerThread player2, MongoConnection connection){
+	JSONObject states = new JSONObject();
+	JSONObject hash = new JSONObject();
+	static int counter = 0;
+	String filename;
+
+	public GameThread(int game_number, ServerThread player1, ServerThread player2, MongoUpdate mongoupdate){
 		this.game_number=game_number;
 		this.player1 = player1;
 		this.player2 = player2;
-		this.collectionName = player1.getName() + "-" + player2.getName();
-		this.connection = connection;
+		this.mongoupdate = mongoupdate;
+		collectionName = mongoupdate.getCollection();
+
+		//Create states json file
+		filename = collectionName + ".json";
+		try (FileWriter file = new FileWriter(filename)) {
+
+			file.write(states.toJSONString());
+			file.flush();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+		//Create hash json file
+		try (FileWriter file = new FileWriter("hash.json")) {
+			hash.put("HashCode", states.hashCode());
+			file.write(hash.toJSONString());
+			file.flush();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void run() {
@@ -33,10 +60,8 @@ public class GameThread extends Thread{
 		shuffleDeck();
 		deal_deck();
 		
-		
-		
-		if (!connection.hasCollection(collectionName)) {
-			connection.openCollection(player1.getName(), player2.getName());
+		if (!mongoupdate.hasCollection(collectionName)) {
+			mongoupdate.openCollection();
 		} else {
 			System.out.println("Collection exists");
 		}
@@ -47,7 +72,7 @@ public class GameThread extends Thread{
 					compare__cards(game_number);
 				}
 				if (player1.getRounds_played() == 25 && player2.getRounds_played() == 25) {
-					connection.dropCollection();
+					mongoupdate.dropCollection();
 				}
 			} catch (Exception e) {
 
@@ -81,14 +106,14 @@ public class GameThread extends Thread{
 	}
 	public void compare__cards(int game_number){
 		if (get_card_value(player1.getSelected_card())>get_card_value(player2.getSelected_card())) {
-			connection.addPointToPlayer(player1.getName());
+			mongoupdate.addPointToPlayer(player1.getName());
 			player1.round_won();
 			player2.round_lost();
 			System.out.println("Round won by Player " + player1.getPlayer_number() + " .");
 			player1.card_ready=false;
 			player2.card_ready=false;
 		}else if (get_card_value(player1.getSelected_card())<get_card_value(player2.getSelected_card())) {
-			connection.addPointToPlayer(player2.getName());
+			mongoupdate.addPointToPlayer(player2.getName());
 			player2.round_won();
 			player1.round_lost();
 			System.out.println("Round won by Player " + player2.getPlayer_number() + " .");
@@ -102,7 +127,7 @@ public class GameThread extends Thread{
 			player1.card_ready=false;
 		}
 
-		connection.incrementRound(player1.getName(), player2.getName());
+		mongoupdate.incrementRound(player1.getName(), player2.getName());
 	}
 	
 

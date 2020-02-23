@@ -58,22 +58,6 @@ public class MongoConnection{
 		//document2.append("RemainingCards", deck2);
 		collection.insertOne(document2);
 	}
-
-	/** Updates game state on collection */
-	public void updatePlayerInfo (String playerName, String changedValue, String newValue) {
-		try {
-			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
-			Document found = (Document) collection.find(new Document("Player", playerName)).first();
-			if(found != null){
-				Bson updatedvalue = new Document(changedValue, newValue);
-				Bson updateoperation = new Document("$set", updatedvalue);
-				collection.findOneAndUpdate(found,updateoperation);
-			}
-		} catch (Exception e){
-			System.out.println("Error updating player info in " + collectionName + "/" + playerName);
-		}
-		
-	}
 	
 	public void incrementRound(String player1, String player2) {
 		try {
@@ -152,5 +136,17 @@ public class MongoConnection{
 		collection.drop();
 		
 	}
+
+
+	public void setCollectionName(String collectionName) {
+		this.collectionName = collectionName;
+	}
+
+	public String getCollectionName() {
+		// TODO Auto-generated method stub
+		return collectionName;
+	}
+	
+	
 
 }

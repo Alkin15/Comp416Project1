@@ -11,7 +11,7 @@ import java.util.Enumeration;
 
 public class ServerThread extends Thread{
 
-	MongoConnection connection;
+	MongoUpdate mongoupdate;
 
 	String line=null;
 	BufferedReader  is = null;
@@ -28,10 +28,10 @@ public class ServerThread extends Thread{
 	int[] deck = new int[26];
 	public volatile boolean  card_ready;
 
-	public ServerThread(Socket s, int player_number, MongoConnection connection){
+	public ServerThread(Socket s, int player_number, MongoUpdate mongoupdate){
 		this.s=s;
 		this.player_number = player_number;
-		this.connection = connection;
+		this.mongoupdate = mongoupdate;
 	}
 
 	public void run() {
@@ -45,7 +45,8 @@ public class ServerThread extends Thread{
 
 		try {
 			name = enter_name();
-			System.out.println(name);
+			mongoupdate.addUser(name);
+			System.out.println(name + " joined session.");
 			try {
 				line=is.readLine();
 				selected_card = Integer.parseInt(line);
@@ -129,7 +130,7 @@ public class ServerThread extends Thread{
 								s.close();
 								System.out.println("Socket Closed");
 							}
-							connection.dropCollection();
+							mongoupdate.dropCollection();
 
 						}
 						catch(IOException ie){
@@ -167,12 +168,12 @@ public class ServerThread extends Thread{
 
 				}
 				if (line.compareTo("QUIT")==0) {
-					connection.dropCollection();
+					mongoupdate.dropCollection();
 					break;
 				}
 				
 			}
-			connection.dropCollection();
+			mongoupdate.dropCollection();
 		}
 		catch(NullPointerException e){
 			line=this.getName(); //reused String line for getting thread name
@@ -197,7 +198,7 @@ public class ServerThread extends Thread{
 					s.close();
 					System.out.println("Socket Closed");
 				}
-				connection.dropCollection();
+				mongoupdate.dropCollection();
 
 			}
 			catch(IOException ie){

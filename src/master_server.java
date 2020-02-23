@@ -19,7 +19,7 @@ public class master_server
 	/*collection name, a.k.a the game's name. */
 	String collectionName;
 	
-	MongoConnection connection = new MongoConnection(collectionName);
+	
 	
 	public static final String DEFAULT_SERVER_ADDRESS = "127.0.0.1";
 	public static final int DEFAULT_SERVER_PORT = 4444;
@@ -49,7 +49,7 @@ public class master_server
                 /*
                 Opens up a server socket on the specified port and listens
                  */
-            	InetAddress addr = InetAddress.getByName("192.168.1.2");
+            	InetAddress addr = InetAddress.getByName("192.168.43.42");
             	players = new ServerThread[50];
             	gameThread = new GameThread[25];
                 serverSocket = new ServerSocket(port,50,addr);
@@ -63,21 +63,24 @@ public class master_server
             while (true)
             {
                 try {
+                	MongoUpdate mongoupdate = new MongoUpdate();
     				s = serverSocket.accept();
-    				ServerThread st = new ServerThread(s,player_number, connection);
+    				ServerThread st = new ServerThread(s,player_number, mongoupdate);
     				st.start();
+    				
     				players[player_number-1] = st;
     				player_number++;
     				waiting_player_number++;
     				System.out.println("A connection was established with a client on the address of " + s.getRemoteSocketAddress()+ "With Player Number:" + st.player_number);
     				if (waiting_player_number == 2) {
     					System.out.println("Game has started for " + (game_number+1) + " !");
-    					GameThread gameThread = new GameThread(game_number,players[game_number*2],players[game_number*2+1], connection);
+    					GameThread gameThread = new GameThread(game_number,players[game_number*2],players[game_number*2+1], mongoupdate);
     					gameThread.start();
     					game_number++;
     					waiting_player_number = 0 ;
-
+    					mongoupdate.start();
     				}
+    				
     				
     			
 
@@ -94,10 +97,11 @@ public class master_server
 
                 
             }
+           
 			
 		}else if (follower == true) {
 			try {
-				InetAddress addr = InetAddress.getByName("192.168.1.2");
+				InetAddress addr = InetAddress.getByName("192.168.43.42");
 				System.out.println("Follower init");
 				Sock = new ServerSocket(4445,50,addr);
 				follower_Thread[] follower_all = new follower_Thread[25];

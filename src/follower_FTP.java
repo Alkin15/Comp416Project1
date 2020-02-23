@@ -30,7 +30,7 @@ public class follower_FTP {
             /*
             Opens up a server socket on the specified port and listens
              */
-        	InetAddress addr = InetAddress.getByName("172.20.44.29");
+        	InetAddress addr = InetAddress.getByName("192.168.43.42");
             Sock = new ServerSocket(port,50,addr);
     		DataInputStream cin = new DataInputStream(s.getInputStream());
     		DataOutputStream cout = new DataOutputStream(s.getOutputStream());
