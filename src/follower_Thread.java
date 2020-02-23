@@ -38,6 +38,12 @@ public class follower_Thread extends Thread{
 		}
 		
 	}
+	
+	/**
+	* Is used to send files to the client from the server the main use case of FTP.
+	* @param s is the socket we connected to the server.
+	* @throws Exception if file is not sent.
+	*/
 	 public void sendfile(Socket s) throws Exception {
 		 Socket ssock = s;
 
@@ -56,6 +62,11 @@ public class follower_Thread extends Thread{
 			System.out.println("File Sent");
 		}
 
+	 /**
+	 * Is used to recieve files from the server the main use of the  TCP.
+	 * @param s is the socket we connected to the server.
+	 * @throws Exception if file is not sent.
+	 */
 		public void receivefile(Socket s) throws Exception {
 			Socket ssock = s;
 

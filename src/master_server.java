@@ -85,8 +85,8 @@ public class master_server
     					gameThread.start();
     					game_number++;
     					waiting_player_number = 0 ;
-    					String name1 = players[game_number*2].getName();
-    					String name2 =  players[game_number*2+1].getName();
+//    					String name1 = players[game_number*2].getName();
+//    					String name2 =  players[game_number*2+1].getName();
     					
     					mongoUpdate.start();
     				}

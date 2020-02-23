@@ -29,6 +29,7 @@ public class GameThread extends Thread{
 		this.player2 = player2;
 		this.collectionName = player1.getName() + "-" + player2.getName();
 		this.connection = connection;
+		connection.setPlayers(player1, player2);
 		File theDir = new File("GameStates");
 		if(!theDir.exists()){
 			theDir.mkdir();
@@ -146,6 +147,9 @@ public class GameThread extends Thread{
 		}
 	}
 
+	/**
+	 * This function is used to shuffle the indexes of the deck array.
+	 */
 	void shuffleDeck() {
 		Random rand = new Random();
 
@@ -155,23 +159,43 @@ public class GameThread extends Thread{
 		}
 	}
 
+	/**
+	 * Used to shuffle the deck with changing the elements. 
+	 * @param i deck index that is generated randomly.
+	 * @param j deck index that is generated randomly.
+	 */
 	void swapCards(int i, int j) {
 		int temp = deck[i];
 		deck[i] = deck[j];
 		deck[j] = temp;
 	}
+	
+	/**
+	 * Initiliazes each players deck. 
+	 */
 	public void deal_deck(){
 		for (int i = 0; i < 26; i++) {
 			player1.deck[i]=deck[i];
 			player2.deck[i]=deck[i+26];
 		}
 	}
+	
+	/**
+	 * Get the real value of the card.
+	 * @param card deck index
+	 * @return
+	 */
 	public int get_card_value(int card){
 		return card%13;
 	}
+	
+	/**
+	 * Compare the card values of each selected cards from the players. 
+	 * @param game_number is used to get the index of the players deck.
+	 */
 	public void compare__cards(int game_number){
 		if (get_card_value(player1.getSelected_card())>get_card_value(player2.getSelected_card())) {
-			connection.addPointToPlayer(player1.getName());
+			
 			player1.round_won();
 			player2.round_lost();
 			System.out.println("Round won by Player " + player1.getPlayer_number() + " .");
@@ -179,7 +203,7 @@ public class GameThread extends Thread{
 			player1.card_ready=false;
 			player2.card_ready=false;
 		}else if (get_card_value(player1.getSelected_card())<get_card_value(player2.getSelected_card())) {
-			connection.addPointToPlayer(player2.getName());
+			
 			player2.round_won();
 			player1.round_lost();
 			System.out.println("Round won by Player " + player2.getPlayer_number() + " .");
@@ -195,7 +219,7 @@ public class GameThread extends Thread{
 			player1.card_ready=false;
 		}
 
-		connection.incrementRound(player1.getName(), player2.getName());
+		
 	}
 
 

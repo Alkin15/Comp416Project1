@@ -19,6 +19,8 @@ public class MongoConnection{
 	/*collection name, a.k.a the game's name. */
 	private String collectionName;
 	
+	String player1, player2;
+	
 	private static final String uri = "mongodb+srv://Admin:admin@cluster0-9d4rq.mongodb.net/test?retryWrites=true&w=majority";
 	private static final MongoClientURI clientURI = new MongoClientURI(uri);
 	private static final MongoClient mongoClient = new MongoClient(clientURI);
@@ -108,79 +110,79 @@ public class MongoConnection{
 	/**
 	 * @deprecated
 	 * */
-	public void incrementRound(String player1, String player2) {
-		try {
-			int oldscore;
-			Bson updatedvalue;
-			Bson updateoperation;
-			
-			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
-			Document found1 = (Document) collection.find(new Document("Player", player1)).first();
-			Document found2 = (Document) collection.find(new Document("Player", player2)).first();
-			if(found1 != null && found2 != null){
-				oldscore = found1.getInteger("NumRounds");
-				updatedvalue = new Document("NumRounds", oldscore++);
-				updateoperation = new Document("$set", updatedvalue);
-				collection.findOneAndUpdate(found1,updateoperation);
-				
-				oldscore = found2.getInteger("NumRounds");
-				updatedvalue = new Document("NumRounds", oldscore++);
-				updateoperation = new Document("$set", updatedvalue);
-				collection.findOneAndUpdate(found2,updateoperation);
-			}
-		} catch (Exception e){
-			//System.out.println("Error adding point to player in " + collectionName + "/" + player1);
-		}
-	}
+//	public void incrementRound(String player1, String player2) {
+//		try {
+//			int oldscore;
+//			Bson updatedvalue;
+//			Bson updateoperation;
+//			
+//			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+//			Document found1 = (Document) collection.find(new Document("Player", player1)).first();
+//			Document found2 = (Document) collection.find(new Document("Player", player2)).first();
+//			if(found1 != null && found2 != null){
+//				oldscore = found1.getInteger("NumRounds");
+//				updatedvalue = new Document("NumRounds", oldscore++);
+//				updateoperation = new Document("$set", updatedvalue);
+//				collection.findOneAndUpdate(found1,updateoperation);
+//				
+//				oldscore = found2.getInteger("NumRounds");
+//				updatedvalue = new Document("NumRounds", oldscore++);
+//				updateoperation = new Document("$set", updatedvalue);
+//				collection.findOneAndUpdate(found2,updateoperation);
+//			}
+//		} catch (Exception e){
+//			//System.out.println("Error adding point to player in " + collectionName + "/" + player1);
+//		}
+//	}
 	
 	/** Increases a player's score by 1 
 	 * @deprecated*/
 	
-	public void addPointToPlayer (String playerName) {
-		try {
-			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
-			Document found = (Document) collection.find(new Document("Player", playerName)).first();
-			if(found != null){
-				int oldscore = found.getInteger("Score");
-				Bson updatedvalue = new Document("Score", oldscore++);
-				Bson updateoperation = new Document("$set", updatedvalue);
-				collection.updateOne(found,updateoperation);
-				
-//				BasicDBObject updatedDocument = new BasicDBObject();
-//				updatedDocument.append("$set", new BasicDBObject().append("longitude", longitude));
-			}
-		} catch (Exception e){
-			System.out.println("Error adding point to player in " + collectionName + "/" + playerName);
-		}
-		
-	}
+//	public void addPointToPlayer (String playerName) {
+//		try {
+//			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+//			Document found = (Document) collection.find(new Document("Player", playerName)).first();
+//			if(found != null){
+//				int oldscore = found.getInteger("Score");
+//				Bson updatedvalue = new Document("Score", oldscore++);
+//				Bson updateoperation = new Document("$set", updatedvalue);
+//				collection.updateOne(found,updateoperation);
+//				
+////				BasicDBObject updatedDocument = new BasicDBObject();
+////				updatedDocument.append("$set", new BasicDBObject().append("longitude", longitude));
+//			}
+//		} catch (Exception e){
+//			System.out.println("Error adding point to player in " + collectionName + "/" + playerName);
+//		}
+//		
+//	}
 	
-	/** Removes the selected card from a player's deck 
-	 * @deprecated*/
-	public void removeCard (String playerName, int cardNum) {
-		try {
-			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
-			Document found = (Document) collection.find(new Document("Player", playerName)).first();
-			if(found != null){
-				int[] cards = (int[]) found.get("RemainingCards");
-				
-				int result[] = new int[cards.length-1];
-				int j = 0;
-			    for(int i = 0; i < cards.length; i++)
-			        if(cardNum != cards[i]) {
-			            result[j] = cards[i];
-			            j++;
-			        }
-				
-				Bson updatedvalue = new Document("Remaining cards", result);
-				Bson updateoperation = new Document("$set", updatedvalue);
-				collection.findOneAndUpdate(found,updateoperation);
-			}
-		} catch (Exception e){
-			System.out.println("Error removing card in " + collectionName + "/" + playerName);
-		}
-		
-	}
+//	/** Removes the selected card from a player's deck 
+//	 * @deprecated*/
+//	public void removeCard (String playerName, int cardNum) {
+//		try {
+//			MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+//			Document found = (Document) collection.find(new Document("Player", playerName)).first();
+//			if(found != null){
+//				int[] cards = (int[]) found.get("RemainingCards");
+//				
+//				int result[] = new int[cards.length-1];
+//				int j = 0;
+//			    for(int i = 0; i < cards.length; i++)
+//			        if(cardNum != cards[i]) {
+//			            result[j] = cards[i];
+//			            j++;
+//			        }
+//				
+//				Bson updatedvalue = new Document("Remaining cards", result);
+//				Bson updateoperation = new Document("$set", updatedvalue);
+//				collection.findOneAndUpdate(found,updateoperation);
+//			}
+//		} catch (Exception e){
+//			System.out.println("Error removing card in " + collectionName + "/" + playerName);
+//		}
+//		
+//	}
 	
 	/** Drops collection */
 	public void dropCollection() {
@@ -188,6 +190,11 @@ public class MongoConnection{
 		collection.drop();
 		
 	}
+	
+//	public void updatePlayers() {
+//		updatePlayerInfo (player1, String changedValue, String newValue)
+//		
+//	}
 
 	/** Returns collection name
 	 * @return collectionName
@@ -195,6 +202,12 @@ public class MongoConnection{
 	public String getCollectionName() {
 		// TODO Auto-generated method stub
 		return collectionName;
+	}
+
+	public void setPlayers(ServerThread player1, ServerThread player2) {
+		// TODO Auto-generated method stub
+		this.player1 = player1.getName();
+		this.player2 = player2.getName();
 	}
 
 }

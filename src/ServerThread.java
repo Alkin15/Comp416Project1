@@ -137,7 +137,7 @@ public class ServerThread extends Thread{
 								System.out.println("Socket Closed");
 							}
 							Thread.currentThread().interrupt();
-							connection.dropCollection();
+							//connection.dropCollection();
 							
 
 						}
@@ -206,7 +206,7 @@ public class ServerThread extends Thread{
 					s.close();
 					System.out.println("Socket Closed");
 				}
-				connection.dropCollection();
+				//connection.dropCollection();
 				Thread.interrupted();
 
 			}
@@ -215,11 +215,19 @@ public class ServerThread extends Thread{
 			}
 		}//end finally
 	}
+	
+	/**
+	* Increase the rounds won, rounds played and set the last message for the player to win.
+	*/
 	public void round_won(){
 		rounds_won++;
 		rounds_played++;
 		last_round = "You have won the last round!";
 	}
+	
+	/**
+	 * Increase the rounds lost and set the last message for the player to win.
+	 */
 	public void round_lost(){
 		rounds_played++;
 		last_round= "You have lost the last round";
@@ -280,6 +288,10 @@ public class ServerThread extends Thread{
 
 	public void setPlayerName(String name) {
 		this.name = name;
+	}
+	
+	public void setConnection(MongoConnection connection) {
+		this.connection = connection;
 	}
 
 }

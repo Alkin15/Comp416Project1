@@ -95,18 +95,18 @@ public class MongoUpdate extends Thread{
 	/**
 	 * @deprecated
 	 * */
-	public void incrementRound(String player1, String name2) {
-		// TODO Auto-generated method stub
-		connection.incrementRound(player1, name2);
-	}
+//	public void incrementRound(String player1, String name2) {
+//		// TODO Auto-generated method stub
+//		connection.incrementRound(player1, name2);
+//	}
 
 	/**
 	 * @deprecated
 	 * */
-	public void addPointToPlayer(String name) {
-		// TODO Auto-generated method stub
-		connection.addPointToPlayer(name);
-	}
+//	public void addPointToPlayer(String name) {
+//		// TODO Auto-generated method stub
+//		connection.addPointToPlayer(name);
+//	}
 
 	/**
 	 * Checks if the database has the collection with the name collectionName
