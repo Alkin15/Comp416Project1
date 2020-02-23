@@ -18,7 +18,7 @@ public class ServerThread extends Thread{
 	int selected_card ; 
 	int rounds_won=0;
 	String last_round;
-	volatile int rounds_played=23;
+	volatile int rounds_played=0;
 	int game_start=0;
 	String name;
 	public boolean did_win;
@@ -66,7 +66,30 @@ public class ServerThread extends Thread{
 								os.flush();
 
 							}else{
-								os.println(deck[rounds_played]);
+								int card_value = deck[rounds_played];
+								String decimal = Integer.toString(card_value);
+								System.out.println(decimal);
+
+								if (decimal.length() == 1){
+									os.println(card_value);
+								}else if (decimal.length() == 2){
+									int remainder = (card_value % 13);
+									switch (remainder){
+										case 10:
+											os.println("a");
+											break;
+										case 11:
+											os.println("b");
+											break;
+										case 12:
+											os.println("c");
+											break;
+										default:
+											os.println(remainder);
+									}
+
+								}
+
 								os.flush();
 								card_ready = true;
 
