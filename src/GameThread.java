@@ -183,7 +183,7 @@ public class GameThread extends Thread{
 	/**
 	 * Get the real value of the card.
 	 * @param card deck index
-	 * @return
+	 * @return card value
 	 */
 	public int get_card_value(int card){
 		return card%13;

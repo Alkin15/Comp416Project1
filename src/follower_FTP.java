@@ -20,7 +20,6 @@ public class follower_FTP {
 
 	/**
 	 * Initiates a server socket on the input port and keeps listening on the line
-	 * @param port
 	 */
 	public follower_FTP()
 	{

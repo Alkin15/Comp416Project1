@@ -32,7 +32,9 @@ public class MongoConnection{
 
 	/** Check if our database has a collection with the same name. 
 	 * If it does, it means we cannot create a game with the same name,
-	 * since we want the game names to be unique */
+	 * since we want the game names to be unique 
+	 * 
+	 * @param collectionName collection name*/
 	public boolean hasCollection (String collectionName) {
 		for (String name : mongoDatabase.listCollectionNames()) {
 			if (name.equals(collectionName)) {
